@@ -239,17 +239,21 @@ impl Builder {
             };
 
             for (private, hosts) in container.network_settings.ports {
-                let host = match hosts.into_iter().next() {
-                    Some(host) => host,
-                    None => continue,
-                };
+                if let Some(hosts) = hosts {
+                    let host = match hosts.into_iter().next() {
+                        Some(host) => host,
+                        None => continue,
+                    };
 
-                let private = private.split("/").next().unwrap().parse()?;
-                let public = host.host_port.parse()?;
+                    let private = private.split("/").next().unwrap().parse()?;
+                    let public = host.host_port.parse()?;
 
-                map.entry(service.clone())
-                    .or_insert_with(|| HashMap::new())
-                    .insert(private, public);
+                    map.entry(service.clone())
+                        .or_insert_with(|| HashMap::new())
+                        .insert(private, public);
+                } else {
+                    continue;
+                }
             }
         }
 

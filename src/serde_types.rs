@@ -20,7 +20,7 @@ pub struct Config {
 #[derive(Debug, Deserialize)]
 pub struct NetworkSettings {
     #[serde(rename = "Ports")]
-    pub ports: HashMap<String, Vec<Port>>,
+    pub ports: HashMap<String, Option<Vec<Port>>>,
 }
 
 #[derive(Debug, Deserialize)]
