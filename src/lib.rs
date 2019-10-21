@@ -1,10 +1,5 @@
 //! A wrapper over Docker compositions.
 
-use serde_json;
-
-#[macro_use]
-extern crate log;
-
 use std::collections::HashMap;
 use std::error::Error;
 use std::io::{BufRead, BufReader};
@@ -14,8 +9,6 @@ use std::thread;
 use std::time::{Duration, Instant};
 
 use serde_types::Container;
-
-#[cfg_attr(rustfmt, rustfmt_skip)]
 mod serde_types;
 
 /// A running Docker composition.
@@ -200,7 +193,7 @@ impl Builder {
                     Err(_) => return,
                 };
 
-                info!("{}", line);
+                log::debug!("{}", line);
             }
         });
 
@@ -287,6 +280,7 @@ fn compose_command(compose_path: &Path, compose_file: &Path, args: &[&str]) -> C
 }
 
 fn run(mut command: Command) -> Result<String, Box<dyn Error>> {
+    log::info!("running {:?}", &command);
     let output = command.output()?;
 
     if !output.status.success() {
