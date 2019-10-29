@@ -69,6 +69,17 @@ impl DockerComposition {
     pub fn finish(mut self) -> Result<(), Box<dyn Error>> {
         self.finish_inner()
     }
+
+    pub fn debug(&self) -> Result<(), Box<dyn Error>> {
+        let containers = run(compose_command(
+            &self.docker_compose,
+            &self.compose_file,
+            &["ps"],
+        ))?;
+
+        log::info!("containers state: {:#?}", &containers);
+        Ok(())
+    }
 }
 
 /// A builder to configure `DockerComposition`s.
